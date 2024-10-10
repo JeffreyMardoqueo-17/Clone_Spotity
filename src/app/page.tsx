@@ -14,9 +14,32 @@ export default function Home() {
 
             <section className="mb-10">
                 <h2 className="text-xl font-semibold mb-4">Estaciones populares</h2>
-                <div className="grid grid-cols-6 gap-4">
-                    <Estaciones />
-
+                <div className="flex gap-3">
+                    <Estaciones
+                        img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5LyiPYazT44dBDSZ83oTQsT_iRP2Bw4W4sw&s"
+                        titulo="Los Temerarios"
+                        descripcion="Con Los Bukis, Los Yonic's, Los Rehenes..."
+                    />
+                    <Estaciones
+                        img="https://www.hola.com/horizon/landscape/701889d25af9-shakira-z.jpg"
+                        titulo="Shakira"
+                        descripcion="Con Karol G, Juanes, Julieta Venegas..."
+                    />
+                    <Estaciones
+                        img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu9PMvIeeHAVXm52DNCVVhJ5eYwRIOcNktbg&s"
+                        titulo="Maná"
+                        descripcion="Con Bacilos, Caifanes, Sin Bandera..."
+                    />
+                    <Estaciones
+                        img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5LyiPYazT44dBDSZ83oTQsT_iRP2Bw4W4sw&s"
+                        titulo="Los Temerarios"
+                        descripcion="Con Los Bukis, Los Yonic's, Los Rehenes..."
+                    />
+                    <Estaciones
+                        img="https://www.hola.com/horizon/landscape/701889d25af9-shakira-z.jpg"
+                        titulo="Shakira"
+                        descripcion="Con Karol G, Juanes, Julieta Venegas..."
+                    />
                 </div>
             </section>
 
