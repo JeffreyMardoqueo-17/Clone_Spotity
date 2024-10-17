@@ -1,122 +1,125 @@
-import type { Metadata } from "next";
-import "./globals.css"; import { IoPlaySkipBack, IoPlaySkipForward, IoPause, IoShuffle, IoRepeat } from "react-icons/io5";
-import { IoVolumeHigh } from "react-icons/io5";
-import { IoHeartOutline } from "react-icons/io5";
-import { IoAdd, IoSearch, IoList } from "react-icons/io5";
+"use client";
+import { useState } from "react";
+import { IoAdd, IoSearch, IoList, IoClose } from "react-icons/io5";
+import PlaylistItem from "@/components/PlaylistItem";
+import "./globals.css";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const router = useRouter();
+  const pathname = usePathname(); // Usamos usePathname para detectar la ruta actual
+
+  const playlists = [
+    { imageSrc: "https://via.placeholder.com/50", title: "Tus me gusta", subtitle: "Playlist • 6 canciones" },
+    { imageSrc: "https://via.placeholder.com/50", title: "Paris Texas", subtitle: "Álbum • Kevin Kaarl" },
+    { imageSrc: "https://via.placeholder.com/50", title: "Khea", subtitle: "Playlist • Jeffrey Mardoqueo" },
+    { imageSrc: "https://via.placeholder.com/50", title: "Entrenamiento", subtitle: "Playlist • Jeffrey Mardoqueo" },
+    { imageSrc: "https://via.placeholder.com/50", title: "Mis favoritos noche", subtitle: "Playlist • Jeffrey Mardoqueo" },
+  ];
+
+
+  const filteredPlaylists = playlists.filter((playlist) =>
+    playlist.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const goHome = () => {
+    router.push('/'); // Redirigir a la página de inicio
+  };
+
   return (
     <html lang="en">
       <body className="antialiased bg-black text-white">
-        <div className="flex h-screen">
-          {/* Barra lateral izquierda */}
-          <aside className="w-64 bg-black text-gray-300 p-5">
-            <div className="flex flex-col space-y-5">
-              {/* Encabezado de la biblioteca */}
-              <div className="flex items-center justify-between">
-                <div className="text-xl font-bold">Tu biblioteca</div>
-                <IoAdd size={20} className="text-gray-300 hover:text-white cursor-pointer" />
-              </div>
+        <div className="flex flex-col h-screen">
+          {/* Header con botón de menú */}
+          <header className="flex justify-between items-center p-4 bg-neutral-900">
+            <div className="text-xl font-bold">Kodigo Music</div>
+            {/* Botón de menú (hamburguesa) que abre el sidebar */}
+            <button
+              className="lg:hidden p-2 text-gray-300 hover:text-white"
+              onClick={() => setSidebarOpen(true)} // Abrir el sidebar
+            >
+              <IoList size={25} />
+            </button>
+          </header>
 
-              {/* Navegación por categorías */}
-              <nav className="flex space-x-2">
-                <button className="bg-neutral-800 text-white px-3 py-1 rounded-full text-sm focus:outline-none">
-                  Playlists
+          <div className="flex h-full">
+            {/* Barra lateral izquierda - visible en pantallas grandes */}
+            <aside
+              className={`${sidebarOpen ? "block" : "hidden"
+                } lg:flex lg:w-64 bg-black text-gray-300 p-5 fixed lg:static z-40 inset-0 lg:inset-auto lg:relative lg:z-auto transition-transform lg:transform-none transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+            >
+              <div className="flex flex-col space-y-5 w-full">
+                {/* Botón de cerrar (X) solo en móviles */}
+                <button
+                  className="lg:hidden self-end text-gray-300 hover:text-white"
+                  onClick={() => setSidebarOpen(false)} // Cerrar el sidebar
+                >
+                  <IoClose size={25} />
                 </button>
-                <button className="bg-neutral-800 text-white px-3 py-1 rounded-full text-sm focus:outline-none">
-                  Artistas
-                </button>
-                <button className="bg-neutral-800 text-white px-3 py-1 rounded-full text-sm focus:outline-none">
-                  Álbumes
-                </button>
-              </nav>
 
-              {/* Barra de búsqueda y recientes */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center bg-neutral-800 rounded-full px-3 py-1">
-                  <IoSearch size={18} className="text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Buscar"
-                    className="bg-transparent text-white ml-2 focus:outline-none text-sm"
-                  />
+                {/* Encabezado de la biblioteca */}
+                <div className="flex items-center justify-between">
+                  <div className="text-xl font-bold">Tu biblioteca</div>
+                  <IoAdd size={20} className="text-gray-300 hover:text-white cursor-pointer" />
                 </div>
-                <IoList size={20} className="text-gray-300 hover:text-white cursor-pointer" />
-              </div>
 
-              {/* Listado de playlists o álbumes */}
-              <div className="flex flex-col space-y-4 mt-4">
-                <div className="flex items-center space-x-3">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Tus me gusta"
-                    className="w-12 h-12 rounded"
-                  />
-                  <div>
-                    <div className="text-white font-semibold">Tus me gusta</div>
-                    <div className="text-sm text-gray-400">Playlist • 6 canciones</div>
+                {/* Mostrar el botón "Regresar al Home" solo si NO estamos en "/" */}
+                {pathname !== "/" && (
+                  <button
+                    onClick={goHome} // Manejador del evento click
+                    className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group"
+                    type="button"
+                  >
+                    Regresar al Home
+                    <span className="absolute inset-0 bg-white rounded-full opacity-10 transition-opacity duration-300 group-hover:opacity-20"></span>
+                  </button>
+                )}
+
+                {/* Barra de búsqueda */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center bg-neutral-800 rounded-full px-3 py-1 w-full">
+                    <IoSearch size={18} className="text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Buscar álbum o playlist"
+                      className="bg-transparent text-white ml-2 focus:outline-none text-sm h-7 p-1 w-full"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-3">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Paris Texas"
-                    className="w-12 h-12 rounded"
-                  />
-                  <div>
-                    <div className="text-white font-semibold">Paris Texas</div>
-                    <div className="text-sm text-gray-400">Álbum • Kevin Kaarl</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Khea"
-                    className="w-12 h-12 rounded"
-                  />
-                  <div>
-                    <div className="text-white font-semibold">Khea</div>
-                    <div className="text-sm text-gray-400">Playlist • Jeffrey Mardoqueo</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Entrenamiento"
-                    className="w-12 h-12 rounded"
-                  />
-                  <div>
-                    <div className="text-white font-semibold">Entrenamiento</div>
-                    <div className="text-sm text-gray-400">Playlist • Jeffrey Mardoqueo</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <img
-                    src="https://via.placeholder.com/50"
-                    alt="Mis favoritos noche"
-                    className="w-12 h-12 rounded"
-                  />
-                  <div>
-                    <div className="text-white font-semibold">Mis favoritos noche</div>
-                    <div className="text-sm text-gray-400">Playlist • Jeffrey Mardoqueo</div>
-                  </div>
+                {/* Listado de playlists o álbumes filtrados */}
+                <div className="flex flex-col space-y-4 mt-4">
+                  {filteredPlaylists.length > 0 ? (
+                    filteredPlaylists.map((playlist, index) => (
+                      <PlaylistItem
+                        key={index}
+                        imageSrc={playlist.imageSrc}
+                        title={playlist.title}
+                        subtitle={playlist.subtitle}
+                      />
+                    ))
+                  ) : (
+                    <p className="text-gray-400">No se encontraron resultados</p>
+                  )}
                 </div>
               </div>
-            </div>
-          </aside>
+            </aside>
 
-          <main className="flex-1 bg-neutral-900 p-8 overflow-y-auto">
-            {/* aqui se renderizara tdias las vistas */}
-            {children}
-          </main>
+            {/* Contenido principal */}
+            <main className="flex-1 bg-neutral-900 p-8 overflow-y-auto">
+              {children}
+            </main>
+          </div>
         </div>
       </body>
     </html>
