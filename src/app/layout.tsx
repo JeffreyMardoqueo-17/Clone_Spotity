@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { IoAdd, IoSearch, IoList, IoClose, IoChevronDown } from "react-icons/io5";
 import PlaylistItem from "@/components/PlaylistItem";
 import Image from "next/image";
-import fotoPerfil from "@/assets/foto.jpg"; // Imagen del perfil
-import iconoKodigo from "@/assets/Icono.svg"; // Importamos el icono
+import fotoPerfil from "@/assets/foto.jpg";
+import iconoKodigo from "@/assets/Icono.svg";
 import "./globals.css";
 import { useRouter, usePathname } from "next/navigation"; // Para manejar la navegación
 
@@ -13,28 +13,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
-  const router = useRouter(); // Usamos useRouter para la navegación
+  const router = useRouter(); // useRouter para la navegación
   const pathname = usePathname(); // Obtener la ruta actual
 
   const playlists = [
     { id: "gusta", imageSrc: "https://png.pngtree.com/png-clipart/20231016/original/pngtree-orange-heart-in-circle-button-png-image_13319362.png", title: "Tus me gusta", subtitle: "Playlist • 500 canciones" },
-    // { id: "plan", imageSrc: "https://via.placeholder.com/50", title: "Plan Premium", subtitle: "Conoce nuestro plan" },
     { id: "episodios", imageSrc: "https://png.pngtree.com/png-clipart/20230813/original/pngtree-microphone-circle-orange-flat-icon-audio-shadow-speech-vector-picture-image_10585734.png", title: "Tus Episodios", subtitle: "Podcast guardados y descargados" },
     { id: "dukiandkhea", imageSrc: "https://lh3.googleusercontent.com/proxy/XNvHJsOh9JJiN9K1xN8clMBz4Ee8yaWstVRbrEJ2n2P8ZhL0wGxFT3XYMj-bJvKEXl6_bVui5oElK8A1R4aS7Q4WS6axL7aBbKK66weyjQ", title: "Khea & Duki", subtitle: "Playlist • Jeffrey Mardoqueo" },
-    { id: "lordhuron", imageSrc: "https://i.scdn.co/image/ab6761610000e5eb1d4e4e7e3c5d8fa494fc5f10", title: "Lord Huron", subtitle: "Albun • Lord Huron" },
-    //   { imageSrc: "https://via.placeholder.com/50", title: "Musica Instrumental", subtitle: "Playlist • Jeffrey Mardoqueo" },
-    //   { imageSrc: "https://via.placeholder.com/50", title: "Mis favoritos noche", subtitle: "Playlist • Jeffrey Mardoqueo" },
+    { id: "lordhuron", imageSrc: "https://i.scdn.co/image/ab6761610000e5eb1d4e4e7e3c5d8fa494fc5f10", title: "Lord Huron", subtitle: "Álbum • Lord Huron" },
   ];
-  // const playlists = [
-  //   { imageSrc: "https://via.placeholder.com/50", title: "Tus me gusta", subtitle: "Playlist • 500 canciones" },
-  //   { imageSrc: "https://via.placeholder.com/50", title: "Tus Episodios", subtitle: "Podcast guardados y descargados" },
-  //   { imageSrc: "https://via.placeholder.com/50", title: "Khea & Duki", subtitle: "Playlist • Jeffrey Mardoqueo" },
-  //   { imageSrc: "https://via.placeholder.com/50", title: "Entrenamiento", subtitle: "Playlist • Jeffrey Mardoqueo" },
-  //   { imageSrc: "https://via.placeholder.com/50", title: "Musica Instrumental", subtitle: "Playlist • Jeffrey Mardoqueo" },
-  //   { imageSrc: "https://via.placeholder.com/50", title: "Mis favoritos noche", subtitle: "Playlist • Jeffrey Mardoqueo" },
-  // ];
-
-
 
   const filteredPlaylists = playlists.filter((playlist) =>
     playlist.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -46,6 +33,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const handlePlaylistClick = (id: string) => {
     router.push(`/${id}`); // Navegar a la ruta específica
+
+    // Verificamos si la pantalla es pequeña (ancho menor a 768px)
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false); // Cerrar el sidebar solo en pantallas pequeñas
+    }
   };
 
   // Función para cerrar el menú de perfil cuando se hace clic fuera de él
@@ -77,14 +69,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
               {/* Logo de la app */}
               <div className="flex items-center">
-                {/* Ícono al lado del nombre */}
                 <Image
-                  src={iconoKodigo} // Icono importado de la carpeta assets
+                  src={iconoKodigo}
                   alt="Ícono de Kodigo"
-                  width={30} // Ajusta el tamaño del icono como prefieras
+                  width={30}
                   height={30}
                 />
-                <div className="ml-2 text-xl font-bold">Kodigo Music</div> {/* Nombre de la app */}
+                <div className="ml-2 text-xl font-bold">Kodigo Music</div>
               </div>
             </div>
 
@@ -115,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {profileMenuOpen && (
                 <div className="absolute z-50 right-0 mt-12 w-48 bg-neutral-800 text-white rounded-lg shadow-lg p-4 backdrop-blur-md" ref={profileMenuRef}>
                   <ul className="space-y-2">
-                    <li className="hover:text-gray-400 cursor-pointer">Mi Perfil</li>
+                    <li className="hover:text-gray-400 cursor-pointer"><a href="perfil">Mi Perfi</a>l</li>
                     <li className="hover:text-gray-400 cursor-pointer">Configuración</li>
                     <li className="hover:text-gray-400 cursor-pointer">Cerrar sesión</li>
                   </ul>
@@ -195,7 +186,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </aside>
 
             {/* Contenido principal */}
-            <main className="flex-1 bg-neutral-900 overflow-y-auto">
+            <main className="flex-1 bg-neutral-900 overflow-y-auto p-1 md:p-4">
               {children}
             </main>
           </div>

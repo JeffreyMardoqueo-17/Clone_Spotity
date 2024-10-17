@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
-// Interfaz para los datos de las canciones
+import { motion } from "framer-motion";
 interface Song {
     id: string;
     title: string;
@@ -115,7 +114,13 @@ export default function KheaDukiPage() {
                     </thead>
                     <tbody className="cursor-pointer">
                         {songs.map((song, index) => (
-                            <tr key={song.id} className="hover:bg-neutral-800 px-2 md:px-4">
+                            <motion.tr
+                                key={song.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }} // Retraso progresivo para las filas
+                                className="hover:bg-neutral-800"
+                            >
                                 <td className="py-3">{index + 1}</td>
                                 <td className="py-3 flex items-center break-words">
                                     <img
@@ -131,7 +136,7 @@ export default function KheaDukiPage() {
                                 <td className="hidden md:table-cell py-3 text-gray-400 truncate">{song.album}</td>
                                 <td className="hidden md:table-cell py-3 text-gray-400">{song.addedDate}</td>
                                 <td className="py-3 text-right text-gray-400">{song.duration}</td>
-                            </tr>
+                            </motion.tr>
                         ))}
                     </tbody>
                 </table>

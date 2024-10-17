@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
+import { motion } from "framer-motion";
 // Interfaz para los datos de las canciones
 interface Song {
     id: string;
@@ -104,7 +104,12 @@ export default function LordHuronPage() {
                     </thead>
                     <tbody className="cursor-pointer">
                         {songs.map((song, index) => (
-                            <tr key={song.id} className="hover:bg-neutral-800">
+                            <motion.tr
+                                key={song.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }} // Retraso progresivo para las filas
+                                className="hover:bg-neutral-800">
                                 <td className="py-3">{index + 1}</td>
                                 <td className="py-3 flex items-center">
                                     <img
@@ -124,7 +129,7 @@ export default function LordHuronPage() {
                                     {song.addedDate}
                                 </td>
                                 <td className="py-3 text-right text-gray-400">{song.duration}</td>
-                            </tr>
+                            </motion.tr>
                         ))}
                     </tbody>
                 </table>

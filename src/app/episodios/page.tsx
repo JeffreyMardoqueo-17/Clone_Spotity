@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
+import { motion } from "framer-motion";
 // Interfaz para los datos de los episodios/podcasts
 interface Podcast {
     id: string;
@@ -108,7 +108,12 @@ export default function PodcastPage() {
                     </thead>
                     <tbody className="cursor-pointer">
                         {podcasts.map((podcast, index) => (
-                            <tr key={podcast.id} className="hover:bg-neutral-800 px-2 md:px-4">
+                            <motion.tr
+                                key={podcast.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }} // Retraso progresivo para las filas
+                                className="hover:bg-neutral-800">
                                 <td className="py-3">{index + 1}</td>
                                 <td className="py-3 flex items-center break-words">
                                     <img
@@ -130,7 +135,7 @@ export default function PodcastPage() {
                                     {podcast.releaseDate}
                                 </td>
                                 <td className="py-3 text-right text-gray-400">{podcast.duration}</td>
-                            </tr>
+                            </motion.tr>
                         ))}
                     </tbody>
                 </table>
