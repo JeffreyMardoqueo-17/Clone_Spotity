@@ -1,28 +1,39 @@
 "use client";
-import { useState } from "react";
-import { IoAdd, IoSearch, IoList, IoClose } from "react-icons/io5";
+import { useState, useEffect, useRef } from "react";
+import { IoAdd, IoSearch, IoList, IoClose, IoChevronDown } from "react-icons/io5";
 import PlaylistItem from "@/components/PlaylistItem";
+import Image from "next/image";
+import fotoPerfil from "@/assets/foto.jpg"; // Imagen del perfil
+import iconoKodigo from "@/assets/Icono.svg"; // Importamos el icono
 import "./globals.css";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation"; // Para manejar la navegación
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const router = useRouter();
-  const pathname = usePathname(); // Usamos usePathname para detectar la ruta actual
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter(); // Usamos useRouter para la navegación
+  const pathname = usePathname(); // Obtener la ruta actual
 
   const playlists = [
-    { imageSrc: "https://via.placeholder.com/50", title: "Tus me gusta", subtitle: "Playlist • 6 canciones" },
-    { imageSrc: "https://via.placeholder.com/50", title: "Paris Texas", subtitle: "Álbum • Kevin Kaarl" },
-    { imageSrc: "https://via.placeholder.com/50", title: "Khea", subtitle: "Playlist • Jeffrey Mardoqueo" },
-    { imageSrc: "https://via.placeholder.com/50", title: "Entrenamiento", subtitle: "Playlist • Jeffrey Mardoqueo" },
-    { imageSrc: "https://via.placeholder.com/50", title: "Mis favoritos noche", subtitle: "Playlist • Jeffrey Mardoqueo" },
+    { id: "gusta", imageSrc: "https://png.pngtree.com/png-clipart/20231016/original/pngtree-orange-heart-in-circle-button-png-image_13319362.png", title: "Tus me gusta", subtitle: "Playlist • 500 canciones" },
+    // { id: "plan", imageSrc: "https://via.placeholder.com/50", title: "Plan Premium", subtitle: "Conoce nuestro plan" },
+    { id: "episodios", imageSrc: "https://png.pngtree.com/png-clipart/20230813/original/pngtree-microphone-circle-orange-flat-icon-audio-shadow-speech-vector-picture-image_10585734.png", title: "Tus Episodios", subtitle: "Podcast guardados y descargados" },
+    { id: "dukiandkhea", imageSrc: "https://lh3.googleusercontent.com/proxy/XNvHJsOh9JJiN9K1xN8clMBz4Ee8yaWstVRbrEJ2n2P8ZhL0wGxFT3XYMj-bJvKEXl6_bVui5oElK8A1R4aS7Q4WS6axL7aBbKK66weyjQ", title: "Khea & Duki", subtitle: "Playlist • Jeffrey Mardoqueo" },
+    { id: "lordhuron", imageSrc: "https://i.scdn.co/image/ab6761610000e5eb1d4e4e7e3c5d8fa494fc5f10", title: "Lord Huron", subtitle: "Albun • Lord Huron" },
+    //   { imageSrc: "https://via.placeholder.com/50", title: "Musica Instrumental", subtitle: "Playlist • Jeffrey Mardoqueo" },
+    //   { imageSrc: "https://via.placeholder.com/50", title: "Mis favoritos noche", subtitle: "Playlist • Jeffrey Mardoqueo" },
   ];
+  // const playlists = [
+  //   { imageSrc: "https://via.placeholder.com/50", title: "Tus me gusta", subtitle: "Playlist • 500 canciones" },
+  //   { imageSrc: "https://via.placeholder.com/50", title: "Tus Episodios", subtitle: "Podcast guardados y descargados" },
+  //   { imageSrc: "https://via.placeholder.com/50", title: "Khea & Duki", subtitle: "Playlist • Jeffrey Mardoqueo" },
+  //   { imageSrc: "https://via.placeholder.com/50", title: "Entrenamiento", subtitle: "Playlist • Jeffrey Mardoqueo" },
+  //   { imageSrc: "https://via.placeholder.com/50", title: "Musica Instrumental", subtitle: "Playlist • Jeffrey Mardoqueo" },
+  //   { imageSrc: "https://via.placeholder.com/50", title: "Mis favoritos noche", subtitle: "Playlist • Jeffrey Mardoqueo" },
+  // ];
+
 
 
   const filteredPlaylists = playlists.filter((playlist) =>
@@ -33,27 +44,91 @@ export default function RootLayout({
     router.push('/'); // Redirigir a la página de inicio
   };
 
+  const handlePlaylistClick = (id: string) => {
+    router.push(`/${id}`); // Navegar a la ruta específica
+  };
+
+  // Función para cerrar el menú de perfil cuando se hace clic fuera de él
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+        setProfileMenuOpen(false); // Cerrar el menú si se hace clic fuera de él
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <html lang="en">
       <body className="antialiased bg-black text-white">
         <div className="flex flex-col h-screen">
-          {/* Header con botón de menú */}
-          <header className="flex justify-between items-center p-4 bg-neutral-900">
-            <div className="text-xl font-bold">Kodigo Music</div>
-            {/* Botón de menú (hamburguesa) que abre el sidebar */}
-            <button
-              className="lg:hidden p-2 text-gray-300 hover:text-white"
-              onClick={() => setSidebarOpen(true)} // Abrir el sidebar
-            >
-              <IoList size={25} />
-            </button>
+          <header className="flex items-center p-4 bg-neutral-900">
+            <div className="flex items-center space-x-4">
+              {/* Botón de menú (hamburguesa) que abre el sidebar, visible solo en móviles */}
+              <button
+                className="lg:hidden p-2 text-gray-300 hover:text-white"
+                onClick={() => setSidebarOpen(true)} // Abrir el sidebar
+              >
+                <IoList size={25} />
+              </button>
+
+              {/* Logo de la app */}
+              <div className="flex items-center">
+                {/* Ícono al lado del nombre */}
+                <Image
+                  src={iconoKodigo} // Icono importado de la carpeta assets
+                  alt="Ícono de Kodigo"
+                  width={30} // Ajusta el tamaño del icono como prefieras
+                  height={30}
+                />
+                <div className="ml-2 text-xl font-bold">Kodigo Music</div> {/* Nombre de la app */}
+              </div>
+            </div>
+
+            {/* Sección de perfil (visible en todas las pantallas) */}
+            <div className="flex items-center space-x-3 ml-auto">
+              {/* Imagen de perfil usando Next.js Image */}
+              <Image
+                src={fotoPerfil}
+                alt="Foto de perfil"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full cursor-pointer"
+                onClick={() => setProfileMenuOpen(!profileMenuOpen)} // Abrir/Cerrar el menú de perfil
+              />
+
+              {/* Nombre del usuario (solo en pantallas grandes) */}
+              <span className="hidden lg:block text-white font-medium">Jeffrey Mardoqueo</span>
+
+              {/* Ícono de flecha solo en pantallas grandes */}
+              <button
+                onClick={() => setProfileMenuOpen(!profileMenuOpen)} // Abrir/Cerrar el menú de perfil
+                className="hidden lg:block text-white hover:text-gray-400"
+              >
+                <IoChevronDown size={20} />
+              </button>
+
+              {/* Menú de perfil (se muestra cuando profileMenuOpen es true) */}
+              {profileMenuOpen && (
+                <div className="absolute z-50 right-0 mt-12 w-48 bg-neutral-800 text-white rounded-lg shadow-lg p-4 backdrop-blur-md" ref={profileMenuRef}>
+                  <ul className="space-y-2">
+                    <li className="hover:text-gray-400 cursor-pointer">Mi Perfil</li>
+                    <li className="hover:text-gray-400 cursor-pointer">Configuración</li>
+                    <li className="hover:text-gray-400 cursor-pointer">Cerrar sesión</li>
+                  </ul>
+                </div>
+              )}
+            </div>
           </header>
 
           <div className="flex h-full">
             {/* Barra lateral izquierda - visible en pantallas grandes */}
             <aside
-              className={`${sidebarOpen ? "block" : "hidden"
-                } lg:flex lg:w-64 bg-black text-gray-300 p-5 fixed lg:static z-40 inset-0 lg:inset-auto lg:relative lg:z-auto transition-transform lg:transform-none transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+              className={`rounded-tr-lg rounded-br-lg ${sidebarOpen ? "block" : "hidden"
+                } lg:flex lg:w-3/12 bg-black text-gray-300 p-5 fixed lg:static z-40 inset-0 lg:inset-auto lg:relative lg:z-auto transition-transform lg:transform-none transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
                 }`}
             >
               <div className="flex flex-col space-y-5 w-full">
@@ -74,8 +149,8 @@ export default function RootLayout({
                 {/* Mostrar el botón "Regresar al Home" solo si NO estamos en "/" */}
                 {pathname !== "/" && (
                   <button
-                    onClick={goHome} // Manejador del evento click
-                    className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group"
+                    onClick={goHome}
+                    className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group text-center justify-center"
                     type="button"
                   >
                     Regresar al Home
@@ -101,12 +176,16 @@ export default function RootLayout({
                 <div className="flex flex-col space-y-4 mt-4">
                   {filteredPlaylists.length > 0 ? (
                     filteredPlaylists.map((playlist, index) => (
-                      <PlaylistItem
+                      <div
                         key={index}
-                        imageSrc={playlist.imageSrc}
-                        title={playlist.title}
-                        subtitle={playlist.subtitle}
-                      />
+                        onClick={() => handlePlaylistClick(playlist.id)} // Redirigir a la ruta correcta
+                      >
+                        <PlaylistItem
+                          imageSrc={playlist.imageSrc}
+                          title={playlist.title}
+                          subtitle={playlist.subtitle}
+                        />
+                      </div>
                     ))
                   ) : (
                     <p className="text-gray-400">No se encontraron resultados</p>
@@ -116,7 +195,7 @@ export default function RootLayout({
             </aside>
 
             {/* Contenido principal */}
-            <main className="flex-1 bg-neutral-900 p-8 overflow-y-auto">
+            <main className="flex-1 bg-neutral-900 overflow-y-auto">
               {children}
             </main>
           </div>

@@ -14,8 +14,8 @@ export default function BuyPlan() {
     return (
         <div className="flex justify-center items-center">
             <button
-                onClick={handleClick} // Manejador del evento click
-                className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group"
+                onClick={handleClick}
+                className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group z-0"
                 type="button"
             >
                 Obtener Plan
