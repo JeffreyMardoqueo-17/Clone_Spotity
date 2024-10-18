@@ -1,5 +1,4 @@
 import Estaciones from "@/components/Estaciones";
-import BuyPlan from "@/components/BuyPlan";
 import { FaGuitar, FaRegHeart, FaMusic, FaHeadphones } from "react-icons/fa";
 import GeneroMusical from "@/components/GeneroMusical";
 

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface Song {
     id: string;
@@ -80,7 +81,7 @@ export default function FavoritesPage() {
         <div className="p-4 md:p-10">
             {/* Cabecera de la Playlist */}
             <div className="bg-[#f88254] p-6 rounded-lg mb-8 flex flex-col md:flex-row items-center">
-                <img
+                <Image
                     src={defaultAlbumCover}
                     alt="Playlist"
                     className="w-24 h-24 md:w-28 md:h-28 rounded-lg mb-4 md:mb-0 md:mr-6"

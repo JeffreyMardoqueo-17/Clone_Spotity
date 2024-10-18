@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Interfaz para los datos de las canciones
 interface Song {
@@ -532,7 +533,7 @@ export default function KheaDukiPage() {
                             >
                                 <td className="py-3">{index + 1}</td>
                                 <td className="py-3 flex items-center break-words">
-                                    <img
+                                    <Image
                                         src={song.albumCover}
                                         alt={song.title}
                                         className="w-10 h-10 md:w-12 md:h-12 rounded-lg mr-4"

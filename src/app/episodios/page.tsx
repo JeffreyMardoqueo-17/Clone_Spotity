@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 // Interfaz para los datos de los episodios/podcasts
 interface Podcast {
@@ -173,7 +174,7 @@ export default function PodcastPage() {
                                 className="hover:bg-neutral-800">
                                 <td className="py-3">{index + 1}</td>
                                 <td className="py-3 flex items-center break-words">
-                                    <img
+                                    <Image
                                         src={podcast.podcastCover}
                                         alt={podcast.title}
                                         className="w-10 h-10 md:w-12 md:h-12 rounded-lg mr-4"

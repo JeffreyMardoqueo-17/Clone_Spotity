@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { FaLinkedin, FaGithub, FaTwitter, FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaWhatsapp, FaFacebook, FaInstagram } from "react-icons/fa";
 import fotoPerfil from "@/assets/foto.jpg"; // Reemplaza con la imagen real
 
 
