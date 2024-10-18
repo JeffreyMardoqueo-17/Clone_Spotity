@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+
 interface Song {
     id: string;
     title: string;
@@ -20,59 +21,60 @@ export default function FavoritesPage() {
     const [songs] = useState<Song[]>([
         {
             id: "1",
-            title: "Abrazado a Ti",
-            artist: "Kevin Kaarl",
-            albumCover: defaultAlbumCover,
-            album: "San Lucas",
-            addedDate: "19 ago 2022",
-            duration: "3:35",
-        },
-        {
-            id: "2",
-            title: "Dos Almas",
-            artist: "Kevin Kaarl",
-            albumCover: defaultAlbumCover,
-            album: "Hasta el Fin Del Mundo",
-            addedDate: "10 ago 2022",
-            duration: "4:24",
-        },
-        {
-            id: "3",
             title: "The Night We Met",
             artist: "Lord Huron",
             albumCover: defaultAlbumCover,
             album: "Strange Trails",
-            addedDate: "15 dic 2021",
+            addedDate: "12 feb 2023",
             duration: "3:28",
         },
         {
-            id: "4",
-            title: "Yellow",
-            artist: "Coldplay",
+            id: "2",
+            title: "Blinding Lights",
+            artist: "The Weeknd",
             albumCover: defaultAlbumCover,
-            album: "Parachutes",
-            addedDate: "11 nov 2021",
-            duration: "4:26",
+            album: "After Hours",
+            addedDate: "20 abr 2020",
+            duration: "3:20",
+        },
+        {
+            id: "3",
+            title: "Levitating",
+            artist: "Dua Lipa",
+            albumCover: defaultAlbumCover,
+            album: "Future Nostalgia",
+            addedDate: "15 jun 2021",
+            duration: "3:23",
+        },
+        {
+            id: "4",
+            title: "Watermelon Sugar",
+            artist: "Harry Styles",
+            albumCover: defaultAlbumCover,
+            album: "Fine Line",
+            addedDate: "05 ago 2020",
+            duration: "2:54",
         },
         {
             id: "5",
-            title: "Postcards from Far Away",
-            artist: "Coldplay (Instrumental)",
+            title: "drivers license",
+            artist: "Olivia Rodrigo",
             albumCover: defaultAlbumCover,
-            album: "Prospekt's March",
-            addedDate: "22 mar 2020",
-            duration: "0:48",
-        },
-        {
-            id: "6",
-            title: "Nuvole Bianche",
-            artist: "Ludovico Einaudi (Instrumental)",
-            albumCover: defaultAlbumCover,
-            album: "Una Mattina",
-            addedDate: "5 mar 2020",
-            duration: "6:05",
+            album: "SOUR",
+            addedDate: "10 ene 2021",
+            duration: "4:02",
         },
     ]);
+
+    // Estado para la búsqueda
+    const [searchTerm, setSearchTerm] = useState("");
+
+    // Función para filtrar las canciones en base al término de búsqueda
+    const filteredSongs = songs.filter(
+        (song) =>
+            song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            song.artist.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="p-4 md:p-10">
@@ -85,8 +87,19 @@ export default function FavoritesPage() {
                 />
                 <div className="text-center md:text-left">
                     <h1 className="text-3xl md:text-4xl font-bold text-white">Tus Me Gustas</h1>
-                    <p className="text-gray-300">Jeffrey Mardoqueo • {songs.length} canciones</p>
+                    <p className="text-gray-300">Jeffrey Mardoqueo • {filteredSongs.length} canciones</p>
                 </div>
+            </div>
+
+            {/* Input para búsqueda */}
+            <div className="mb-6">
+                <input
+                    type="text"
+                    placeholder="Buscar canciones o artistas..."
+                    className="w-full p-3 rounded-lg bg-neutral-800 text-white outline-none"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
             {/* Lista de canciones */}
@@ -94,39 +107,36 @@ export default function FavoritesPage() {
                 <table className="table-auto w-full text-left text-white">
                     <thead className="border-b border-gray-700">
                         <tr>
-                            <th className="py-3">#</th>
-                            <th className="py-3">Título</th>
-                            <th className="py-3 hidden md:table-cell">Álbum</th>
-                            <th className="py-3 hidden md:table-cell">Fecha en que se agregó</th>
-                            <th className="py-3 text-right">Duración</th>
+                            <th className="py-2 md:py-3">#</th>
+                            <th className="py-2 md:py-3">Título</th>
+                            <th className="hidden md:table-cell py-2 md:py-3">Álbum</th>
+                            <th className="hidden md:table-cell py-2 md:py-3">Fecha en que se agregó</th>
+                            <th className="py-2 md:py-3 text-right">Duración</th>
                         </tr>
                     </thead>
                     <tbody className="cursor-pointer">
-                        {songs.map((song, index) => (
+                        {filteredSongs.map((song, index) => (
                             <motion.tr
                                 key={song.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: index * 0.1 }} // Retraso progresivo para las filas
-                                className="hover:bg-neutral-800">
+                                transition={{ duration: 0.3, delay: index * 0.1 }}
+                                className="hover:bg-neutral-800"
+                            >
                                 <td className="py-3">{index + 1}</td>
-                                <td className="py-3 flex items-center">
+                                <td className="py-3 flex items-center break-words">
                                     <img
                                         src={song.albumCover}
                                         alt={song.title}
                                         className="w-10 h-10 md:w-12 md:h-12 rounded-lg mr-4"
                                     />
-                                    <div>
+                                    <div className="flex flex-col">
                                         <p className="text-white font-semibold truncate">{song.title}</p>
-                                        <p className="text-gray-400 truncate">{song.artist}</p>
+                                        <p className="text-gray-400">{song.artist}</p>
                                     </div>
                                 </td>
-                                <td className="py-3 text-gray-400 hidden md:table-cell truncate">
-                                    {song.album}
-                                </td>
-                                <td className="py-3 text-gray-400 hidden md:table-cell">
-                                    {song.addedDate}
-                                </td>
+                                <td className="hidden md:table-cell py-3 text-gray-400 truncate">{song.album}</td>
+                                <td className="hidden md:table-cell py-3 text-gray-400">{song.addedDate}</td>
                                 <td className="py-3 text-right text-gray-400">{song.duration}</td>
                             </motion.tr>
                         ))}

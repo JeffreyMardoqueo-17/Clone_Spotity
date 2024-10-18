@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+
 // Interfaz para los datos de los episodios/podcasts
 interface Podcast {
     id: string;
@@ -17,7 +18,7 @@ export default function PodcastPage() {
     const defaultPodcastCover =
         "https://png.pngtree.com/png-clipart/20230813/original/pngtree-microphone-circle-orange-flat-icon-audio-shadow-speech-vector-picture-image_10585734.png";
 
-    // Lista de episodios de podcast sobre superación personal
+    // Lista de episodios de podcast sobre superación personal (incluyendo el Seminario Fénix)
     const [podcasts] = useState<Podcast[]>([
         {
             id: "1",
@@ -73,7 +74,52 @@ export default function PodcastPage() {
             releaseDate: "22 ago 2021",
             duration: "27:13",
         },
+        {
+            id: "7",
+            title: "Seminario Fénix: Renacer personal",
+            speaker: "Mario Alonso Puig",
+            podcastCover: defaultPodcastCover,
+            series: "Seminario Fénix",
+            releaseDate: "10 jul 2021",
+            duration: "1:20:00",
+        },
+        {
+            id: "8",
+            title: "Seminario Fénix: Transformación Mental",
+            speaker: "Mario Alonso Puig",
+            podcastCover: defaultPodcastCover,
+            series: "Seminario Fénix",
+            releaseDate: "2 dic 2021",
+            duration: "1:15:45",
+        },
+        {
+            id: "9",
+            title: "El Arte de Vivir el Presente",
+            speaker: "Eckhart Tolle",
+            podcastCover: defaultPodcastCover,
+            series: "Despertar Interior",
+            releaseDate: "28 sep 2021",
+            duration: "1:05:13",
+        },
+        {
+            id: "10",
+            title: "Seminario Fénix: Crea tu Futuro",
+            speaker: "Mario Alonso Puig",
+            podcastCover: defaultPodcastCover,
+            series: "Seminario Fénix",
+            releaseDate: "15 ene 2022",
+            duration: "1:30:20",
+        },
     ]);
+
+    // Estado para la búsqueda
+    const [searchTerm, setSearchTerm] = useState("");
+
+    // Función para filtrar los episodios en base al término de búsqueda
+    const filteredPodcasts = podcasts.filter((podcast) =>
+        podcast.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        podcast.speaker.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="p-4 md:p-10">
@@ -89,9 +135,20 @@ export default function PodcastPage() {
                         Episodios de Superación Personal
                     </h1>
                     <p className="text-gray-300">
-                        Jeffrey Mardoqueo • {podcasts.length} episodios
+                        Jeffrey Mardoqueo • {filteredPodcasts.length} episodios
                     </p>
                 </div>
+            </div>
+
+            {/* Input para búsqueda */}
+            <div className="mb-6">
+                <input
+                    type="text"
+                    placeholder="Buscar episodios o conferencistas..."
+                    className="w-full p-3 rounded-lg bg-neutral-800 text-white outline-none"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
             </div>
 
             {/* Lista de episodios de podcasts */}
@@ -107,7 +164,7 @@ export default function PodcastPage() {
                         </tr>
                     </thead>
                     <tbody className="cursor-pointer">
-                        {podcasts.map((podcast, index) => (
+                        {filteredPodcasts.map((podcast, index) => (
                             <motion.tr
                                 key={podcast.id}
                                 initial={{ opacity: 0, y: 20 }}
