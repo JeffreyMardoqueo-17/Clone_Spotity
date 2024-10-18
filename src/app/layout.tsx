@@ -18,8 +18,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const router = useRouter(); // useRouter para la navegación
   const pathname = usePathname(); // Obtener la ruta actual
 
-
-
   const playlists = [
     { id: "gusta", imageSrc: "https://png.pngtree.com/png-clipart/20231016/original/pngtree-orange-heart-in-circle-button-png-image_13319362.png", title: "Tus me gusta", subtitle: "Playlist • 500 canciones" },
     { id: "episodios", imageSrc: "https://png.pngtree.com/png-clipart/20230813/original/pngtree-microphone-circle-orange-flat-icon-audio-shadow-speech-vector-picture-image_10585734.png", title: "Tus Episodios", subtitle: "Podcast guardados y descargados" },
@@ -60,8 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="antialiased bg-black text-white">
-        <div className="flex flex-col h-screen">
-          <header className="flex items-center p-4 bg-neutral-900 fixed w-full z-40">
+        <div className="flex flex-col h-screen"> {/* Configuración de flex para toda la pantalla */}
+          <header className="flex items-center p-4 bg-black fixed w-full z-40">
             <div className="flex items-center space-x-4">
               {/* Botón de menú (hamburguesa) que abre el sidebar, visible solo en móviles */}
               <button
@@ -110,7 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {profileMenuOpen && (
                 <div className="absolute z-50 right-0 mt-12 w-48 bg-neutral-800 text-white rounded-lg shadow-lg p-4 backdrop-blur-md" ref={profileMenuRef}>
                   <ul className="space-y-2">
-                    <li className="hover:text-gray-400 cursor-pointer"><a href="perfil">Mi Perfi</a>l</li>
+                    <li className="hover:text-gray-400 cursor-pointer"><a href="perfil">Mi Perfil</a></li>
                     <li className="hover:text-gray-400 cursor-pointer">Configuración</li>
                     <li className="hover:text-gray-400 cursor-pointer">Cerrar sesión</li>
                   </ul>
@@ -119,86 +117,87 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </header>
 
-          <div className="flex h-full">
-            {/* Barra lateral izquierda - visible en pantallas grandes */}
-            <aside
-              className={`rounded-tr-lg rounded-br-lg ${sidebarOpen ? "block" : "hidden"
-                } lg:flex lg:w-3/12 bg-black text-gray-300 p-5 fixed lg:static z-40 inset-0 lg:inset-auto lg:relative lg:z-auto transition-transform lg:transform-none transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-                }`}
-            >
-              <div className="flex flex-col space-y-5 w-full">
-                {/* Botón de cerrar (X) solo en móviles */}
-                <button
-                  className="lg:hidden self-end text-gray-300 hover:text-white"
-                  onClick={() => setSidebarOpen(false)} // Cerrar el sidebar
-                >
-                  <IoClose size={25} />
-                </button>
-
-                {/* Encabezado de la biblioteca */}
-                <div className="flex items-center justify-between">
-                  <div className="text-xl font-bold">Tu biblioteca</div>
-                  <IoAdd size={20} className="text-gray-300 hover:text-white cursor-pointer" />
-                </div>
-
-                {/* Mostrar el botón "Regresar al Home" solo si NO estamos en "/" */}
-                {pathname !== "/" && (
+          <div className="flex-1 overflow-y-auto mt-10">
+            <div className="flex h-full">
+              {/* Barra lateral izquierda - visible en pantallas grandes */}
+              <aside
+                className={`rounded-tr-lg rounded-br-lg ${sidebarOpen ? "block" : "hidden"
+                  } lg:flex lg:w-3/12 bg-black text-gray-300 p-5 fixed lg:static z-40 inset-0 lg:inset-auto lg:relative lg:z-auto transition-transform lg:transform-none transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                  }`}
+              >
+                <div className="flex flex-col space-y-5 w-full">
+                  {/* Botón de cerrar (X) solo en móviles */}
                   <button
-                    onClick={goHome}
-                    className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group text-center justify-center"
-                    type="button"
+                    className="lg:hidden self-end text-gray-300 hover:text-white"
+                    onClick={() => setSidebarOpen(false)} // Cerrar el sidebar
                   >
-                    Regresar al Home
-                    <span className="absolute inset-0 bg-white rounded-full opacity-10 transition-opacity duration-300 group-hover:opacity-20"></span>
+                    <IoClose size={25} />
                   </button>
-                )}
 
-                {/* Barra de búsqueda */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center bg-neutral-800 rounded-full px-3 py-1 w-full">
-                    <IoSearch size={18} className="text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Buscar álbum o playlist"
-                      className="bg-transparent text-white ml-2 focus:outline-none text-sm h-7 p-1 w-full"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                  {/* Encabezado de la biblioteca */}
+                  <div className="flex items-center justify-between">
+                    <div className="text-xl font-bold">Tu biblioteca</div>
+                    <IoAdd size={20} className="text-gray-300 hover:text-white cursor-pointer" />
                   </div>
-                </div>
 
-                {/* Listado de playlists o álbumes filtrados */}
-                <div className="flex flex-col space-y-4 mt-4">
-                  {filteredPlaylists.length > 0 ? (
-                    filteredPlaylists.map((playlist, index) => (
-                      <div
-                        key={index}
-                        onClick={() => handlePlaylistClick(playlist.id)} // Redirigir a la ruta correcta
-                      >
-                        <PlaylistItem
-                          imageSrc={playlist.imageSrc}
-                          title={playlist.title}
-                          subtitle={playlist.subtitle}
-                        />
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-gray-400">No se encontraron resultados</p>
+                  {/* Mostrar el botón "Regresar al Home" solo si NO estamos en "/" */}
+                  {pathname !== "/" && (
+                    <button
+                      onClick={goHome}
+                      className="flex items-center gap-2 px-6 py-3 bg-[#f77441] text-white font-medium rounded-full text-sm md:text-base lg:text-lg shadow-lg hover:bg-[#ff8b61] transition-all duration-300 relative group text-center justify-center"
+                      type="button"
+                    >
+                      Regresar al Home
+                      <span className="absolute inset-0 bg-white rounded-full opacity-10 transition-opacity duration-300 group-hover:opacity-20"></span>
+                    </button>
                   )}
-                </div>
-                <BuyPlan />
-              </div>
-            </aside>
 
-            {/* Contenido principal */}
-            <main className="flex-1 bg-neutral-900 overflow-y-auto p-1 md:p-4">
-              {children}
-            </main>
+                  {/* Barra de búsqueda */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center bg-neutral-800 rounded-full px-3 py-1 w-full">
+                      <IoSearch size={18} className="text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Buscar álbum o playlist"
+                        className="bg-transparent text-white ml-2 focus:outline-none text-sm h-7 p-1 w-full"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Listado de playlists o álbumes filtrados */}
+                  <div className="flex flex-col space-y-4 mt-4">
+                    {filteredPlaylists.length > 0 ? (
+                      filteredPlaylists.map((playlist, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handlePlaylistClick(playlist.id)} // Redirigir a la ruta correcta
+                        >
+                          <PlaylistItem
+                            imageSrc={playlist.imageSrc}
+                            title={playlist.title}
+                            subtitle={playlist.subtitle}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-gray-400">No se encontraron resultados</p>
+                    )}
+                  </div>
+                  <BuyPlan />
+                </div>
+              </aside>
+
+              {/* Contenido principal */}
+              <main className="flex-1 bg-neutral-900 overflow-y-auto p-1 md:p-4 mb-8">
+                {children}
+              </main>
+              <footer className="bg-black text-white pb-3 fixed bottom-0 w-full z-50 border-t-2 border-neutral-950 h-[60px]">
+                <AudioPlayer />
+              </footer>
+            </div>
           </div>
-          <footer className="bg-neutral-800 text-white p-2 fixed bottom-0 w-full z-50">
-            <AudioPlayer
-            />
-          </footer>
         </div>
       </body>
     </html>
