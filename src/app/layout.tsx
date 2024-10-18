@@ -9,6 +9,13 @@ import "./globals.css";
 import { useRouter, usePathname } from "next/navigation"; // Para manejar la navegación
 import BuyPlan from "@/components/BuyPlan";
 import AudioPlayer from "@/components/AudioPlayer";
+import type { Metadata } from "next";
+
+export const meta: Metadata = {
+  title: "Kodigo Music",
+  description: "Escucha tu música favorita en Kodigo Music",
+};
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [searchTerm, setSearchTerm] = useState("");
