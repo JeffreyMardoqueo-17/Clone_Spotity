@@ -10,7 +10,7 @@ interface IEstaciones {
 
 export default function Estaciones({ img, titulo, descripcion }: IEstaciones) {
     return (
-        <div className="group relative bg-neutral-800 rounded-lg p-4 w-48">
+        <div className="group relative bg-neutral-800 rounded-lg p-4 w-48 min-w-36">
             {/* Imagen y contenido de la tarjeta */}
             <div className="relative">
                 <img

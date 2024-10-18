@@ -7,6 +7,8 @@ import fotoPerfil from "@/assets/foto.jpg";
 import iconoKodigo from "@/assets/Icono.svg";
 import "./globals.css";
 import { useRouter, usePathname } from "next/navigation"; // Para manejar la navegación
+import BuyPlan from "@/components/BuyPlan";
+import AudioPlayer from "@/components/AudioPlayer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,6 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter(); // useRouter para la navegación
   const pathname = usePathname(); // Obtener la ruta actual
+
+
 
   const playlists = [
     { id: "gusta", imageSrc: "https://png.pngtree.com/png-clipart/20231016/original/pngtree-orange-heart-in-circle-button-png-image_13319362.png", title: "Tus me gusta", subtitle: "Playlist • 500 canciones" },
@@ -57,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="antialiased bg-black text-white">
         <div className="flex flex-col h-screen">
-          <header className="flex items-center p-4 bg-neutral-900">
+          <header className="flex items-center p-4 bg-neutral-900 fixed w-full z-40">
             <div className="flex items-center space-x-4">
               {/* Botón de menú (hamburguesa) que abre el sidebar, visible solo en móviles */}
               <button
@@ -182,6 +186,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <p className="text-gray-400">No se encontraron resultados</p>
                   )}
                 </div>
+                <BuyPlan />
               </div>
             </aside>
 
@@ -190,6 +195,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </main>
           </div>
+          <footer className="bg-neutral-800 text-white p-2 fixed bottom-0 w-full z-50">
+            <AudioPlayer
+            />
+          </footer>
         </div>
       </body>
     </html>
