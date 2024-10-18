@@ -1,5 +1,6 @@
-import { IoAdd, IoSearch, IoList, IoClose, IoChevronDown } from "react-icons/io5"; // Importamos IoChevronDown para la flecha
+import { IoList, IoChevronDown } from "react-icons/io5"; // Importamos IoChevronDown para la flecha
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Header({ setSidebarOpen }: { setSidebarOpen: (open: boolean) => void }) {
     const [profileMenuOpen, setProfileMenuOpen] = useState(false); // Estado para controlar el menú de perfil
@@ -19,7 +20,7 @@ export default function Header({ setSidebarOpen }: { setSidebarOpen: (open: bool
             {/* Sección de perfil */}
             <div className="hidden lg:flex items-center space-x-3">
                 {/* Imagen de perfil */}
-                <img
+                <Image
                     src="https://via.placeholder.com/40" // Placeholder para la imagen de perfil, puedes reemplazarla con la URL real
                     alt="Foto de perfil"
                     className="w-10 h-10 rounded-full"
